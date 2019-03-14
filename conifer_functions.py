@@ -102,15 +102,6 @@ def loadProbeList(CF_probe_filename):
 	return probes
 
 
-def loadRPKM(rpkm_filename):
-	# test if rpkm_filename points to a HDF5 file or a txt file:
-	if isHDF5File(rpkm_filename):
-		rpkm_h5 = openFile(rpkm_filename, mode='r')
-		return rpkm_h5.root.rpkm.rpkm.read(field="rpkm")
-		rpkm_h5.close()
-	else:
-		return np.loadtxt(samples[s], dtype=np.float, delimiter="\t", skiprows=0, usecols=[2])
-		
 def export_sample(h5file_in,sample,probes,outfile_f):
 	dt = np.dtype([('chr','|S10'),('start', '<u4'), ('stop', '<u4'), ('name', '|S20'),('SVDZRPKM',np.float)])
 	for chr in h5file_in.root:
@@ -261,7 +252,7 @@ class rpkm_reader:
 			print "Must specify RPKM HDF5 file!"
 			return 0
 		# set up file access
-		self.h5file = openFile(rpkm_fn, mode='r')
+		self.h5file = open_file(rpkm_fn, mode='r')
 		self.sample_table = self.h5file.root.samples.samples
 		
 	def __del__(self):
