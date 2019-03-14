@@ -60,10 +60,11 @@ def CF_analyze(args):
 		try:
 			import matplotlib
 			matplotlib.use('Agg')
+                        matplotlib.rcParams.update({'figure.max_open_warning': 0})
 			import matplotlib.pyplot as plt
 			import pylab as P
 			from matplotlib.lines import Line2D
-			from matplotlib.patches import Rectangle
+			from matplotlib.patches import Rectangle                        
 		except:
 			print "[ERROR] One or more of the required modules for plotting cannot be loaded! Are matplotlib and pylab installed?"
 			sys.exit(0)
@@ -399,6 +400,7 @@ def CF_plot(args):
 		import locale
 		import matplotlib
 		matplotlib.use('Agg')
+                matplotlib.rcParams.update({'figure.max_open_warning': 0})
 		import matplotlib.pyplot as plt
 		import pylab as P
 		from matplotlib.lines import Line2D
@@ -458,6 +460,7 @@ def CF_plotcalls(args):
 	try:
 		import matplotlib
 		matplotlib.use('Agg')
+                matplotlib.rcParams.update({'figure.max_open_warning': 0})
 		import matplotlib.pyplot as plt
 		import pylab as P
 		from matplotlib.lines import Line2D
@@ -624,7 +627,7 @@ def CF_bam2RPKM(args):
 
 	
 
-VERSION = "0.2.2.1"
+VERSION = "0.2.2"
 parser = argparse.ArgumentParser(prog="CoNIFER", description="This is CoNIFER %s (Copy Number Inference From Exome Reads), designed to detect and genotype CNVs and CNPs from exome sequence read-depth data. See Krumm et al., Genome Research (2012) doi:10.1101/gr.138115.112 \nNiklas Krumm, 2012\n nkrumm@uw.edu" % VERSION)
 parser.add_argument('--version', action='version', version='%(prog)s ' + VERSION)
 subparsers = parser.add_subparsers(help='Command to be run.')

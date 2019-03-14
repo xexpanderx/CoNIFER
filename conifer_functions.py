@@ -109,7 +109,7 @@ def export_sample(h5file_in,sample,probes,outfile_f):
 			continue
 		
 		out_data = np.empty(len(probes[chr._v_title]),dtype=dt)
-		out_data["SVDZRPKM"] = chr._f_getChild("sample_" + sample).read(field='rpkm')
+		out_data["SVDZRPKM"] = chr._f_get_child("sample_" + sample).read(field='rpkm')
 		out_data["chr"] = np.repeat(chr._v_title,len(out_data))
 		out_data["start"] = probes[chr._v_title]["start"]
 		out_data["stop"] = probes[chr._v_title]["stop"]
@@ -260,27 +260,27 @@ class rpkm_reader:
 	
 	def getExonValuesByExons(self, chromosome, start_exon, stop_exon, sampleList=None,genotype=False):
 		
-		probe_tbl = self.h5file.root.probes._f_getChild("probes_chr" + str(chromosome))
-		#table_rows = probe_tbl.getWhereList('(start >= %d) & (stop <= %d)' % (start,stop))
+		probe_tbl = self.h5file.root.probes._f_get_child("probes_chr" + str(chromosome))
+		#table_rows = probe_tbl.get_where_list('(start >= %d) & (stop <= %d)' % (start,stop))
 		start_exon = max(start_exon,0)
 		stop_exon = min(stop_exon, probe_tbl.nrows)
 		#print start_exon, stop_exon
 		table_rows = np.arange(start_exon,stop_exon,1)
-		data_tbl  = self.h5file.root._f_getChild("chr" + str(chromosome))
+		data_tbl  = self.h5file.root._f_get_child("chr" + str(chromosome))
 		
 		if sampleList == None:
 			num_samples = data_tbl._v_nchildren
 			samples = data_tbl	
 		else:
 			num_samples = len(sampleList)
-			samples = [data_tbl._f_getChild("sample_" + s) for s in sampleList]
+			samples = [data_tbl._f_get_child("sample_" + s) for s in sampleList]
 		
 		data = np.empty([num_samples,len(table_rows)],dtype=np.float)
 		
 		out_sample_list = []
 		cnt = 0
 		for sample_tbl in samples:
-			d = sample_tbl.readCoordinates(table_rows,field="rpkm")
+			d = sample_tbl.read_coordinates(table_rows,field="rpkm")
 			data[cnt,:] = d
 			cnt +=1
 			out_sample_list.append(sample_tbl.title)
@@ -292,32 +292,32 @@ class rpkm_reader:
 		else: #return all data points
 			d.rpkm = data.transpose()
 		d.samples = out_sample_list
-		d.exons = probe_tbl.readCoordinates(table_rows)
+		d.exons = probe_tbl.read_coordinates(table_rows)
 		
 		return d
 	
 	def getExonValuesByRegion(self, chromosome, start=None, stop=None, sampleList=None,genotype=False):
-		probe_tbl = self.h5file.root.probes._f_getChild("probes_chr" + str(chromosome))
+		probe_tbl = self.h5file.root.probes._f_get_child("probes_chr" + str(chromosome))
 		if (start is not None) and (stop is not None):
-			table_rows = probe_tbl.getWhereList('(start >= %d) & (stop <= %d)' % (start,stop))
+			table_rows = probe_tbl.get_where_list('(start >= %d) & (stop <= %d)' % (start,stop))
 		else:
-			table_rows = probe_tbl.getWhereList('(start >= 0) & (stop <= 1000000000)')
+			table_rows = probe_tbl.get_where_list('(start >= 0) & (stop <= 1000000000)')
 		
-		data_tbl  = self.h5file.root._f_getChild("chr" + str(chromosome))
+		data_tbl  = self.h5file.root._f_get_child("chr" + str(chromosome))
 		
 		if sampleList == None:
 			num_samples = data_tbl._v_nchildren
 			samples = data_tbl	
 		else:
 			num_samples = len(sampleList)
-			samples = [data_tbl._f_getChild("sample_" + s) for s in sampleList]
+			samples = [data_tbl._f_get_child("sample_" + s) for s in sampleList]
 		
 		data = np.empty([num_samples,len(table_rows)],dtype=np.float)
 		
 		out_sample_list = []
 		cnt = 0
 		for sample_tbl in samples:
-			d = sample_tbl.readCoordinates(table_rows,field="rpkm")
+			d = sample_tbl.read_coordinates(table_rows,field="rpkm")
 			data[cnt,:] = d
 			cnt +=1
 			out_sample_list.append(sample_tbl.title)
@@ -329,7 +329,7 @@ class rpkm_reader:
 		else: #return all data points
 			d.rpkm = data.transpose()
 		d.samples = out_sample_list
-		d.exons = probe_tbl.readCoordinates(table_rows)
+		d.exons = probe_tbl.read_coordinates(table_rows)
 		
 		return d
 	
@@ -358,13 +358,13 @@ class rpkm_reader:
 			readWhereStr = readWhereStr.strip(" &") # remove leading or trailing characters
 		if readWhereStr != "":
 			#print readWhereStr
-			sampleIDs = self.sample_table.readWhere(readWhereStr,field='sampleID')
+			sampleIDs = self.sample_table.read_where(readWhereStr,field='sampleID')
 		else:
 			sampleIDs = self.sample_table.read(field='sampleID')
 		
 		return sampleIDs
 	
 	def getExonIDs(self, chromosome, start, stop):
-		probe_tbl = self.h5file.root.probes._f_getChild("probes_chr" + str(chromosome))
-		exons = probe_tbl.getWhereList('(start >= %d) & (stop <= %d)' % (start,stop))
+		probe_tbl = self.h5file.root.probes._f_get_child("probes_chr" + str(chromosome))
+		exons = probe_tbl.get_where_list('(start >= %d) & (stop <= %d)' % (start,stop))
 		return exons
