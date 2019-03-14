@@ -624,7 +624,7 @@ def CF_bam2RPKM(args):
 
 	
 
-VERSION = "0.2.2"
+VERSION = "0.2.2.1"
 parser = argparse.ArgumentParser(prog="CoNIFER", description="This is CoNIFER %s (Copy Number Inference From Exome Reads), designed to detect and genotype CNVs and CNPs from exome sequence read-depth data. See Krumm et al., Genome Research (2012) doi:10.1101/gr.138115.112 \nNiklas Krumm, 2012\n nkrumm@uw.edu" % VERSION)
 parser.add_argument('--version', action='version', version='%(prog)s ' + VERSION)
 subparsers = parser.add_subparsers(help='Command to be run.')
