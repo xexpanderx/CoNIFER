@@ -559,7 +559,7 @@ def CF_bam2RPKM(args):
 		sys.exit(0)
 	
 	print "[RUNNING] Counting total number of reads in bam file..."
-	total_reads = float(pysam.view("-c", args.input[0])[0].strip("\n"))
+	total_reads = float(pysam.view("-c", args.input[0]).strip("\n"))
 	print "[RUNNING] Found %d reads" % total_reads
 	
 	f = pysam.Samfile(args.input[0], "rb" )	
